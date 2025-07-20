@@ -14,6 +14,7 @@ let messages = {
   jokes: []
 };
 
+
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -31,7 +32,7 @@ async function speakRandomMessages() {
     await speak(greeting);
     
     await new Promise(resolve => setTimeout(resolve, 5000));
-    
+
     while (true) {
         const msg = getRandomMessage('regular');
         await speak(msg);
