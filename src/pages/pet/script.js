@@ -1,8 +1,10 @@
-const messages = [
-    "wow, this is pretty cool i guess?",
-    "uhh, hi?",
-    "whats this"
-];
+async function loadMessages() {
+  const res = await fetch("../../json/message.json");
+  const messages = await res.json();
+  return messages
+}
+
+const messages = loadMessages()
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

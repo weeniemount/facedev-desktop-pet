@@ -1,0 +1,34 @@
+{
+    "greetings": [
+        "Uhh, hi?",
+        "Hello!",
+        "Whats up!",
+        "Facedev here.",
+        "EEEEEE"
+    ],
+    "questions": [
+        "What is this?",
+        "hmm, i wonder whats this?",
+        "What does this do?",
+        "Woah what?",
+        "Cheese"
+    ],
+    "jokes": [
+        "What does a .get().get() do in java? it 'gets' the 'get'.. uhh-",
+        "Knock Knock, Whose there? 85 segmentation faults.",
+        "How do you tell HTML from HTML5? Try it out in Internet Explorer. Did it work? No? It's HTML5.",
+        "Why do Java programmers have to wear glasses? Because they don't C#.. UH",
+        "A programmer had a problem. He decided to use Java. He now has a ProblemFactory.",
+        "3 SQL databases walked into a NoSQL bar. A little while later they walked out, because they couldn't find a table.",
+        "A web developer walks into a restaurant. He immediately leaves in disgust as the restaurant was laid out in tables."
+    ],
+    "amused": [
+        "Wow, this is pretty cool.",
+        "Sick!",
+        "Cool!",
+        "legit",
+        "Sigma!",
+        "Chad",
+        "Vibes"
+    ]
+}

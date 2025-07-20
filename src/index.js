@@ -71,18 +71,18 @@ ipcMain.handle('submit-prompt', async (event, text) => {
 });
 
 ipcMain.on('context-menu', (event, params) => {
-  const menu = Menu.buildFromTemplate([
-    {
-      label: 'Speak!',
-      click: () => {
-        createPromptWindow('What should I say?');
-      },
-    },
-    { type: 'separator' },
-    {
-      label: 'Quit',
-      click: () => app.quit(),
-    },
-  ]);
-  menu.popup({ window: mainWindow });
+	const menu = Menu.buildFromTemplate([
+		{
+			label: 'Speak!',
+			click: () => {
+				createPromptWindow('What should I say?');
+			},
+		},
+		{ type: 'separator' },
+		{
+			label: 'quit',
+			click: () => app.quit(),
+		},
+	]);
+	menu.popup({ window: mainWindow });
 });
