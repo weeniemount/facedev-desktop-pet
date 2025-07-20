@@ -12,6 +12,7 @@ function createPromptWindow(question) {
     alwaysOnTop: true,
     autoHideMenuBar: true,
     resizable: false,
+    skipTaskbar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
