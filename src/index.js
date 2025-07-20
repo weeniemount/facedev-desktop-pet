@@ -28,6 +28,20 @@ function createPromptWindow(question) {
   return win;
 }
 
+function createAboutWindow() {
+  const win = new BrowserWindow({
+    width: 400,
+    height: 200,
+    frame: false,
+    alwaysOnTop: true,
+    autoHideMenuBar: true,
+    resizable: false,
+    skipTaskbar: true
+  });
+
+  win.loadFile('src/pages/about/about.html');
+}
+
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     width: 200,
@@ -89,6 +103,12 @@ ipcMain.on('context-menu', (event, params) => {
 			},
 		},
 		{ type: 'separator' },
+		{
+			label: 'About',
+			click: () => {
+				createAboutWindow();
+			},
+		},
 		{
 			label: 'quit',
 			click: () => app.quit(),
