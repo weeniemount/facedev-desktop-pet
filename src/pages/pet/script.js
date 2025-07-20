@@ -14,6 +14,7 @@ let messages = {
   jokes: []
 };
 
+let isDragging = false;
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -58,8 +59,57 @@ async function speak(msg) {
     el.style.display = "none";
 }
 
+async function moveToRandomPosition() {
+    const bounds = await window.electron.getScreenBounds();
+    const [currentX, currentY] = await window.electron.getWindowPosition();
+    
+    const maxX = bounds.width - 200;
+    const maxY = bounds.height - 200;
+    
+    const targetX = getRandomInt(0, maxX);
+    const targetY = getRandomInt(0, maxY);
+    
+    // Calculate the total distance to move
+    const dx = targetX - currentX;
+    const dy = targetY - currentY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    const baseSteps = 100; // Increased for slower movement
+    const steps = Math.max(baseSteps, Math.floor(distance / 5));
+    
+    // Calculate step size
+    const stepX = dx / steps;
+    const stepY = dy / steps;
+    
+    let currentStepX = 0;
+    let currentStepY = 0;
+    
+    for (let i = 0; i < steps; i++) {
+        const exactX = currentX + (dx * (i / steps));
+        const exactY = currentY + (dy * (i / steps));
+        
+        const [nowX, nowY] = await window.electron.getWindowPosition();
+        
+        const moveX = Math.round(exactX - nowX);
+        const moveY = Math.round(exactY - nowY);
+        
+        window.electron.moveWindow(moveX, moveY);
+        await new Promise(resolve => setTimeout(resolve, 25)); // Slower ~40fps
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     speakRandomMessages();
+
+    // Start random movement timer
+    let isMoving = false;
+    setInterval(async () => {
+        if (!isMoving && !isDragging) {
+            isMoving = true;
+            await moveToRandomPosition();
+            isMoving = false;
+        }
+    }, getRandomInt(5, 10) * 1000);
 
     // Listen for custom speech and joke events from the context menu
     window.electron.onCustomSpeech((text) => {
@@ -72,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const img = document.querySelector('img');
-    let isDragging = false;
     let currentX, currentY;
 
     img.addEventListener('mousedown', (e) => {

@@ -8,4 +8,6 @@ contextBridge.exposeInMainWorld('electron', {
   onSetQuestion: (callback) => ipcRenderer.on('set-question', (event, question) => callback(question)),
   moveWindow: (x, y) => ipcRenderer.send('move-window', { x, y }),
   openInBrowser: (url) => ipcRenderer.invoke('open-in-browser', url),
+  getScreenBounds: () => ipcRenderer.invoke('get-screen-bounds'),
+  getWindowPosition: () => ipcRenderer.invoke('get-window-position')
 });

@@ -137,3 +137,14 @@ ipcMain.handle('open-in-browser', async (event, url) => {
     throw new Error(`Failed to open URL: ${error.message}`);
   }
 });
+
+ipcMain.handle('get-screen-bounds', () => {
+  const { screen } = require('electron');
+  const primaryDisplay = screen.getPrimaryDisplay();
+  return primaryDisplay.workAreaSize;
+});
+
+ipcMain.handle('get-window-position', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  return win.getPosition();
+});
