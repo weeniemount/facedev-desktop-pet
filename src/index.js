@@ -36,7 +36,12 @@ function createAboutWindow() {
     alwaysOnTop: true,
     autoHideMenuBar: true,
     resizable: false,
-    skipTaskbar: true
+    skipTaskbar: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
 
   win.loadFile('src/pages/about/about.html');
@@ -121,4 +126,14 @@ ipcMain.on('move-window', (event, { x, y }) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   const [currentX, currentY] = win.getPosition();
   win.setPosition(currentX + x, currentY + y);
+});
+
+ipcMain.handle('open-in-browser', async (event, url) => {
+  const { shell } = require('electron');
+  try {
+    await shell.openExternal(url);
+    return 'opened';
+  } catch (error) {
+    throw new Error(`Failed to open URL: ${error.message}`);
+  }
 });

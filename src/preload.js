@@ -6,5 +6,6 @@ contextBridge.exposeInMainWorld('electron', {
   onCustomSpeech: (callback) => ipcRenderer.on('custom-speech', (event, text) => callback(text)),
   submitPrompt: (text) => ipcRenderer.invoke('submit-prompt', text),
   onSetQuestion: (callback) => ipcRenderer.on('set-question', (event, question) => callback(question)),
-  moveWindow: (x, y) => ipcRenderer.send('move-window', { x, y })
+  moveWindow: (x, y) => ipcRenderer.send('move-window', { x, y }),
+  openInBrowser: (url) => ipcRenderer.invoke('open-in-browser', url),
 });
