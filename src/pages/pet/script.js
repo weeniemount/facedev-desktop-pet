@@ -18,6 +18,27 @@ let isDragging = false;
 let movementEnabled = true;
 let speechEnabled = true;
 
+// Add message queue system
+let messageQueue = [];
+let isProcessingQueue = false;
+
+async function processMessageQueue() {
+    if (isProcessingQueue || messageQueue.length === 0) return;
+    
+    isProcessingQueue = true;
+    while (messageQueue.length > 0) {
+        const msg = messageQueue[0];
+        await speak(msg);
+        messageQueue.shift();
+    }
+    isProcessingQueue = false;
+}
+
+function queueMessage(msg) {
+    messageQueue.push(msg);
+    processMessageQueue();
+}
+
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -32,7 +53,7 @@ async function speakRandomMessages() {
     messages = await loadMessages();
     
     const greeting = getRandomMessage('greetings');
-    await speak(greeting);
+    queueMessage(greeting);
     
     await new Promise(resolve => setTimeout(resolve, 5000));
     
@@ -42,7 +63,7 @@ async function speakRandomMessages() {
             continue;
         }
         const msg = getRandomMessage('regular');
-        await speak(msg);
+        queueMessage(msg);
         await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
     }
 }
@@ -135,11 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (text === 'tell-joke') {
             if (speechEnabled) {
                 const joke = getRandomMessage('jokes');
-                speak(joke);
+                queueMessage(joke);
             }
         } else {
             if (speechEnabled) {
-                speak(text);
+                queueMessage(text);
             }
         }
     });
