@@ -1,8 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path')
 
+let mainwindow;
+
 app.on('ready', () => {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 200,
     height: 200,
     frame: false,
@@ -22,17 +24,8 @@ app.on('ready', () => {
 
   mainWindow.loadFile('src/index.html');
 
-  ipcMain.on('context-menu', (event, params) => {
-    const menu = Menu.buildFromTemplate([
-      {
-        label: 'Quit',
-        click: () => app.quit(),
-      },
-    ]);
-    menu.popup({ window: mainWindow });
-  });
-
   mainWindow.on('closed', () => {
+    mainwindow = null;
     app.quit();
   });
 });
@@ -44,4 +37,14 @@ ipcMain.handle('speak-text', async (event, text) => {
       else resolve('spoken');
     });
   });
+});
+
+ipcMain.on('context-menu', (event, params) => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Quit',
+      click: () => app.quit(),
+    },
+  ]);
+  menu.popup({ window: mainWindow });
 });

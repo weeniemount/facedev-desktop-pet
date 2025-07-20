@@ -36,3 +36,8 @@ async function speakRandomMessages() {
 document.addEventListener("DOMContentLoaded", () => {
     speakRandomMessages();
 });
+
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    window.electron.contextMenu();
+});
