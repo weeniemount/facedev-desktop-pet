@@ -2,33 +2,7 @@
 <html>
 <head>
     <title>Input</title>
-    <style>
-        body {
-            font-family: system-ui;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-        #question {
-            margin-bottom: 10px;
-        }
-        #input {
-            width: 100%;
-            height: 20px;
-            margin-bottom: 10px;
-        }
-        #buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        button {
-            padding: 5px 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="prompt.css">
 </head>
 <body>
     <div id="question"></div>
@@ -37,31 +11,6 @@
         <button onclick="cancel()">Cancel</button>
         <button onclick="submit()">OK</button>
     </div>
-    <script>
-        const questionEl = document.getElementById('question');
-        const inputEl = document.getElementById('input');
-
-        window.electron.onSetQuestion((question) => {
-            questionEl.textContent = question;
-        });
-
-        function submit() {
-            const text = inputEl.value.trim();
-            if (text) {
-                window.electron.submitPrompt(text);
-            }
-        }
-
-        function cancel() {
-            window.close();
-        }
-
-        // Handle Enter key
-        inputEl.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                submit();
-            }
-        });
-    </script>
+    <script src="prompt.js"></script>
 </body>
 </html> 
