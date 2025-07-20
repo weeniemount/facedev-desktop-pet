@@ -26,7 +26,6 @@ async function speakRandomMessages() {
     }
 }
 
-
 async function speak(msg) {
     // Update UI
     const el = document.getElementById("message");
@@ -45,6 +44,11 @@ async function speak(msg) {
 
 document.addEventListener("DOMContentLoaded", () => {
     speakRandomMessages();
+
+    // Listen for custom speech events from the context menu
+    window.electron.onCustomSpeech((text) => {
+        speak(text);
+    });
 });
 
 document.addEventListener('contextmenu', (e) => {
