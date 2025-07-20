@@ -47,4 +47,5 @@ img {
   height: 120px;
   user-select: none;
   margin-bottom: 20px;
+  cursor: grab;
 }
