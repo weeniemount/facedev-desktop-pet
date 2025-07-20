@@ -5,7 +5,7 @@ ITS SO GOOD
 
 *Features*:
 
-**He can talk!:**
+***He can talk!***
 
 ![hi chat](github/hi%20chat.png)
 
