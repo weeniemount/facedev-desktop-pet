@@ -8,7 +8,7 @@
     "build": "electron-builder build --win",
     "build:dir": "electron-builder build --win --dir"
   },
-  "author": ["weenie", "UsernameThis"],
+  "author": "weenie, UsernameThis",
   "license": "ISC",
   "dependencies": {
     "say": "^0.16.0"
