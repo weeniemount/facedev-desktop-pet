@@ -19,15 +19,20 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: flex-end;
+        height: 200px;
+        width: 200px;
       }
       #message {
-        position: relative;
-        display: inline-block;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         background-color: white;
         color: #333;
         border-radius: 16px;
         padding: 12px 16px;
-        margin-bottom: 20px;
+        min-width: 100px;
         max-width: 180px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         font-size: 14px;
@@ -35,6 +40,7 @@
         z-index: 10;
         user-select: none;
         word-wrap: break-word;
+        width: fit-content;
       }
       #message::after {
         content: '';
@@ -50,9 +56,9 @@
         width: 120px;
         height: 120px;
         user-select: none;
+        margin-bottom: 20px;
       }
     </style>
-    <!-- TODO: Fix the message ruining the pet's position and going down -->
     <div id="message">
         I am very sigma!
     </div>
