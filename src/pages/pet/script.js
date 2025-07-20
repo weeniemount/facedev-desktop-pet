@@ -61,9 +61,14 @@ async function speak(msg) {
 document.addEventListener("DOMContentLoaded", () => {
     speakRandomMessages();
 
-    // Listen for custom speech events from the context menu
+    // Listen for custom speech and joke events from the context menu
     window.electron.onCustomSpeech((text) => {
-        speak(text);
+        if (text === 'tell-joke') {
+            const joke = getRandomMessage('jokes');
+            speak(joke);
+        } else {
+            speak(text);
+        }
     });
 });
 

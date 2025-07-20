@@ -82,6 +82,12 @@ ipcMain.on('context-menu', (event, params) => {
 				createPromptWindow('What should I say?');
 			},
 		},
+		{
+			label: 'Tell a joke',
+			click: () => {
+				mainWindow.webContents.send('custom-speech', 'tell-joke');
+			},
+		},
 		{ type: 'separator' },
 		{
 			label: 'quit',
