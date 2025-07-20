@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('node:path')
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const path = require('path')
+const say = require('say');
 
 let mainwindow;
 
@@ -14,9 +15,9 @@ app.on('ready', () => {
     resizable: false,
     skipTaskbar: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      preload: path.join(__dirname.concat('/src/'), 'preload.js')
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
 
@@ -25,7 +26,7 @@ app.on('ready', () => {
   mainWindow.loadFile('src/index.html');
 
   mainWindow.on('closed', () => {
-    mainwindow = null;
+    mainWindow = null;
     app.quit();
   });
 });
