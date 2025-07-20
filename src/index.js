@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('node:path')
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -13,6 +14,7 @@ app.on('ready', () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      preload: path.join(__dirname.concat('/src/'), 'preload.js')
     },
   });
 
@@ -32,5 +34,14 @@ app.on('ready', () => {
 
   mainWindow.on('closed', () => {
     app.quit();
+  });
+});
+
+ipcMain.handle('speak-text', async (event, text) => {
+  return new Promise((resolve, reject) => {
+    say.speak(text, undefined, 1.0, (err) => {
+      if (err) reject(err);
+      else resolve('spoken');
+    });
   });
 });
