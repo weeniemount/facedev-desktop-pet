@@ -9,11 +9,14 @@ app.on('ready', () => {
     autoHideMenuBar: true,
     alwaysOnTop: true,
     resizable: false,
+    skipTaskbar: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
+
+  app.dock?.hide();
 
   mainWindow.loadFile('src/index.html');
 
