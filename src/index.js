@@ -180,3 +180,7 @@ ipcMain.handle('get-window-position', (event) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   return win.getPosition();
 });
+
+ipcMain.handle('get-version', () => {
+  return app.getVersion();
+});

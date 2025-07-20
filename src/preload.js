@@ -16,5 +16,6 @@ contextBridge.exposeInMainWorld('electron', {
   toggleSpeech: () => ipcRenderer.invoke('toggle-speech'),
   onStateUpdate: (callback) => ipcRenderer.on('state-update', (event, states) => callback(states)),
   onToggleMovement: (callback) => ipcRenderer.on('toggle-movement-request', () => callback()),
-  onToggleSpeech: (callback) => ipcRenderer.on('toggle-speech-request', () => callback())
+  onToggleSpeech: (callback) => ipcRenderer.on('toggle-speech-request', () => callback()),
+  getVersion: () => ipcRenderer.invoke('get-version'),
 });
