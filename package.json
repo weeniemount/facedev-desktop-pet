@@ -1,0 +1,15 @@
+{
+  "name": "facedev-desktop-pet",
+  "version": "1.0.0",
+  "description": "this is something",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^37.2.3"
+  }
+}
