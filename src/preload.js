@@ -9,5 +9,12 @@ contextBridge.exposeInMainWorld('electron', {
   moveWindow: (x, y) => ipcRenderer.send('move-window', { x, y }),
   openInBrowser: (url) => ipcRenderer.invoke('open-in-browser', url),
   getScreenBounds: () => ipcRenderer.invoke('get-screen-bounds'),
-  getWindowPosition: () => ipcRenderer.invoke('get-window-position')
+  getWindowPosition: () => ipcRenderer.invoke('get-window-position'),
+  getMovementState: () => ipcRenderer.invoke('get-movement-state'),
+  getSpeechState: () => ipcRenderer.invoke('get-speech-state'),
+  toggleMovement: () => ipcRenderer.invoke('toggle-movement'),
+  toggleSpeech: () => ipcRenderer.invoke('toggle-speech'),
+  onStateUpdate: (callback) => ipcRenderer.on('state-update', (event, states) => callback(states)),
+  onToggleMovement: (callback) => ipcRenderer.on('toggle-movement-request', () => callback()),
+  onToggleSpeech: (callback) => ipcRenderer.on('toggle-speech-request', () => callback())
 });

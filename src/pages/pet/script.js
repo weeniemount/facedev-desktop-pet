@@ -15,6 +15,8 @@ let messages = {
 };
 
 let isDragging = false;
+let movementEnabled = true;
+let speechEnabled = true;
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,12 +35,14 @@ async function speakRandomMessages() {
     await speak(greeting);
     
     await new Promise(resolve => setTimeout(resolve, 5000));
-
+    
     while (true) {
+        if (!speechEnabled) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            continue;
+        }
         const msg = getRandomMessage('regular');
         await speak(msg);
-
-        // Wait 2-10 second after speaking
         await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
     }
 }
@@ -104,21 +108,49 @@ document.addEventListener("DOMContentLoaded", () => {
     // Start random movement timer
     let isMoving = false;
     setInterval(async () => {
-        if (!isMoving && !isDragging) {
+        if (!isMoving && !isDragging && movementEnabled) {
             isMoving = true;
             await moveToRandomPosition();
             isMoving = false;
         }
     }, getRandomInt(5, 10) * 1000);
 
-    // Listen for custom speech and joke events from the context menu
+    // Listen for state updates
+    window.electron.onStateUpdate(({ movement, speech }) => {
+        movementEnabled = movement;
+        speechEnabled = speech;
+    });
+
+    // Listen for toggle requests
+    window.electron.onToggleMovement(() => {
+        window.electron.toggleMovement();
+    });
+
+    window.electron.onToggleSpeech(() => {
+        window.electron.toggleSpeech();
+    });
+
+    // Listen for custom speech and joke events
     window.electron.onCustomSpeech((text) => {
         if (text === 'tell-joke') {
-            const joke = getRandomMessage('jokes');
-            speak(joke);
+            if (speechEnabled) {
+                const joke = getRandomMessage('jokes');
+                speak(joke);
+            }
         } else {
-            speak(text);
+            if (speechEnabled) {
+                speak(text);
+            }
         }
+    });
+
+    // Initialize states
+    Promise.all([
+        window.electron.getMovementState(),
+        window.electron.getSpeechState()
+    ]).then(([movement, speech]) => {
+        movementEnabled = movement;
+        speechEnabled = speech;
     });
 
     const img = document.querySelector('img');
