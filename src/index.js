@@ -23,7 +23,7 @@ app.on('ready', () => {
 
   app.dock?.hide();
 
-  mainWindow.loadFile('src/index.html');
+  mainWindow.loadFile('src/pages/pet/pet.html');
 
   mainWindow.on('closed', () => {
     mainWindow = null;
