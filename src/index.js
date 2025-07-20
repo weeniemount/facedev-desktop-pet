@@ -43,7 +43,7 @@ ipcMain.handle('speak-text', async (event, text) => {
 ipcMain.on('context-menu', (event, params) => {
   const menu = Menu.buildFromTemplate([
     {
-      label: 'Quit',
+      label: 'quit',
       click: () => app.quit(),
     },
   ]);
