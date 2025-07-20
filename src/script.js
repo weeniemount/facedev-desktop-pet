@@ -25,7 +25,7 @@ async function speakRandomMessages() {
         await new Promise(requestAnimationFrame);
 
         // Now speak and wait for completion
-        await window.ttsAPI.speak(msg);
+        await window.electron.speak(msg);
 
         // Wait 1 second after speaking
         await new Promise(resolve => setTimeout(resolve, 1000));
