@@ -1,6 +1,6 @@
 const messages = [
     "wow, this is pretty cool i guess?",
-    "uhh hi?",
+    "uhh, hi?",
     "whats this"
 ];
 
