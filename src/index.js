@@ -96,3 +96,9 @@ ipcMain.on('context-menu', (event, params) => {
 	]);
 	menu.popup({ window: mainWindow });
 });
+
+ipcMain.on('move-window', (event, { x, y }) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const [currentX, currentY] = win.getPosition();
+  win.setPosition(currentX + x, currentY + y);
+});

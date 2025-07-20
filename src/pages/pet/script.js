@@ -70,6 +70,34 @@ document.addEventListener("DOMContentLoaded", () => {
             speak(text);
         }
     });
+
+    const img = document.querySelector('img');
+    let isDragging = false;
+    let currentX, currentY;
+
+    img.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        currentX = e.screenX;
+        currentY = e.screenY;
+        img.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const moveX = e.screenX - currentX;
+        const moveY = e.screenY - currentY;
+        
+        window.electron.moveWindow(moveX, moveY);
+        
+        currentX = e.screenX;
+        currentY = e.screenY;
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        img.style.cursor = 'grab';
+    });
 });
 
 document.addEventListener('contextmenu', (e) => {
