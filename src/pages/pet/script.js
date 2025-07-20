@@ -1,24 +1,39 @@
 async function loadMessages() {
-  const res = await fetch("../../json/message.json");
-  const messages = await res.json();
-  return messages
+  const res = await fetch("../../json/messages.json");
+  const data = await res.json();
+  return {
+    greetings: data.greetings,
+    regular: [...data.questions, ...data.amused],
+    jokes: data.jokes
+  };
 }
 
-const messages = loadMessages()
+let messages = {
+  greetings: [],
+  regular: [],
+  jokes: []
+};
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getRandomMessage() {
-    const index = Math.floor(Math.random() * messages.length);
-    return messages[index];
+function getRandomMessage(category) {
+    const list = messages[category] || messages.regular;
+    const index = Math.floor(Math.random() * list.length);
+    return list[index];
 }
 
 async function speakRandomMessages() {
+    messages = await loadMessages();
+    
+    const greeting = getRandomMessage('greetings');
+    await speak(greeting);
+    
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
     while (true) {
-        const msg = getRandomMessage();
-
+        const msg = getRandomMessage('regular');
         await speak(msg);
 
         // Wait 2-10 second after speaking

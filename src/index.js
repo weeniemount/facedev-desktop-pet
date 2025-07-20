@@ -57,6 +57,10 @@ app.on('ready', () => {
 
 ipcMain.handle('speak-text', async (event, text) => {
   return new Promise((resolve, reject) => {
+    if (!text || text.trim() === '') {
+      reject(new Error('Text parameter is required for speech'));
+      return;
+    }
     say.speak(text, undefined, 1.0, (err) => {
       if (err) reject(err);
       else resolve('spoken');
