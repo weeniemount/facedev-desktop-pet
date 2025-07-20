@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -19,6 +19,16 @@ app.on('ready', () => {
   app.dock?.hide();
 
   mainWindow.loadFile('src/index.html');
+
+  ipcMain.on('context-menu', (event, params) => {
+    const menu = Menu.buildFromTemplate([
+      {
+        label: 'Quit',
+        click: () => app.quit(),
+      },
+    ]);
+    menu.popup({ window: mainWindow });
+  });
 
   mainWindow.on('closed', () => {
     app.quit();
