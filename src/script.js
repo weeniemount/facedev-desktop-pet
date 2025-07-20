@@ -19,6 +19,7 @@ async function speakRandomMessages() {
 
         // Update UI
         const el = document.getElementById("message");
+        el.style.display = "inline-block";
         if (el) el.innerText = msg;
 
         // Yield control to browser to repaint the UI
@@ -27,8 +28,11 @@ async function speakRandomMessages() {
         // Now speak and wait for completion
         await window.electron.speak(msg);
 
-        // Wait 1 second after speaking
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // hide the message
+        el.style.display = "none";
+
+        // Wait 2-10 second after speaking
+        await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
     }
 }
 
