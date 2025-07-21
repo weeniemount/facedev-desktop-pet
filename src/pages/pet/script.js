@@ -4,19 +4,31 @@ async function loadMessages() {
   return {
     greetings: data.greetings,
     regular: [...data.questions, ...data.amused],
-    jokes: data.jokes
+    jokes: data.jokes,
+    moods: {
+      happy: data.happy || [],
+      sleepy: data.sleepy || [],
+      excited: data.excited || []
+    }
   };
 }
 
 let messages = {
   greetings: [],
   regular: [],
-  jokes: []
+  jokes: [],
+  moods: {
+    happy: [],
+    sleepy: [],
+    excited: []
+  }
 };
 
 let isDragging = false;
 let movementEnabled = true;
 let speechEnabled = true;
+let currentMood = 'happy';
+let lastInteractionTime = Date.now();
 
 // Add message queue system
 let messageQueue = [];
@@ -44,6 +56,12 @@ function getRandomInt(min, max) {
 }
 
 function getRandomMessage(category) {
+    if (category === 'mood') {
+        const moodMessages = messages.moods[currentMood];
+        return moodMessages && moodMessages.length > 0 
+            ? moodMessages[Math.floor(Math.random() * moodMessages.length)]
+            : getRandomMessage('regular');
+    }
     const list = messages[category] || messages.regular;
     const index = Math.floor(Math.random() * list.length);
     return list[index];
@@ -62,9 +80,20 @@ async function speakRandomMessages() {
             await new Promise(resolve => setTimeout(resolve, 1000));
             continue;
         }
-        const msg = getRandomMessage('regular');
+
+        // Check if we should say a mood-specific message
+        const timeSinceLastInteraction = Date.now() - lastInteractionTime;
+        const shouldSayMoodMessage = Math.random() < 0.3 || timeSinceLastInteraction > 30000;
+        
+        const msg = shouldSayMoodMessage ? getRandomMessage('mood') : getRandomMessage('regular');
         queueMessage(msg);
-        await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
+        
+        // Adjust wait time based on mood
+        let waitTime = getRandomInt(2, 10);
+        if (currentMood === 'excited') waitTime = Math.max(1, waitTime - 2);
+        if (currentMood === 'sleepy') waitTime = waitTime + 3;
+        
+        await new Promise(resolve => setTimeout(resolve, waitTime * 1000));
     }
 }
 
@@ -99,7 +128,11 @@ async function moveToRandomPosition() {
     const dy = targetY - currentY;
     const distance = Math.sqrt(dx * dx + dy * dy);
     
-    const baseSteps = 100; // Increased for slower movement
+    // Adjust movement speed based on mood
+    let baseSteps = 100;
+    if (currentMood === 'excited') baseSteps = 70;
+    if (currentMood === 'sleepy') baseSteps = 130;
+    
     const steps = Math.max(baseSteps, Math.floor(distance / 5));
     
     // Calculate step size
@@ -119,14 +152,33 @@ async function moveToRandomPosition() {
         const moveY = Math.round(exactY - nowY);
         
         window.electron.moveWindow(moveX, moveY);
-        await new Promise(resolve => setTimeout(resolve, 25)); // Slower ~40fps
+        await new Promise(resolve => setTimeout(resolve, 25));
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     speakRandomMessages();
 
-    // Start random movement timer
+    // Initialize mood
+    window.electron.getMood().then(mood => {
+        currentMood = mood;
+        updateAppearance();
+    });
+
+    // Listen for mood updates
+    window.electron.onMoodUpdate((mood) => {
+        currentMood = mood;
+        updateAppearance();
+        // Say something about the mood change
+        const moodMessage = getRandomMessage('mood');
+        if (moodMessage) queueMessage(moodMessage);
+    });
+
+    window.electron.onSetMoodRequest((mood) => {
+        window.electron.setMood(mood);
+    });
+
+    // Start random movement timer with mood-based intervals
     let isMoving = false;
     setInterval(async () => {
         if (!isMoving && !isDragging && movementEnabled) {
@@ -176,12 +228,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const img = document.querySelector('img');
     let currentX, currentY;
+    let clickTimeout = null;
+    let clickCount = 0;
+
+    // Handle double and triple clicks
+    img.addEventListener('click', (e) => {
+        clickCount++;
+        lastInteractionTime = Date.now();
+        
+        if (clickTimeout) clearTimeout(clickTimeout);
+        
+        clickTimeout = setTimeout(() => {
+            if (clickCount === 2) {
+                // Double click: Random mood
+                const moods = ['happy', 'sleepy', 'excited'];
+                const newMood = moods[Math.floor(Math.random() * moods.length)];
+                window.electron.setMood(newMood);
+            } else if (clickCount === 3) {
+                // Triple click: Tell a joke
+                const joke = getRandomMessage('jokes');
+                queueMessage(joke);
+            }
+            clickCount = 0;
+        }, 300);
+    });
 
     img.addEventListener('mousedown', (e) => {
         isDragging = true;
         currentX = e.screenX;
         currentY = e.screenY;
         img.style.cursor = 'grabbing';
+        lastInteractionTime = Date.now();
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -200,6 +277,28 @@ document.addEventListener("DOMContentLoaded", () => {
         isDragging = false;
         img.style.cursor = 'grab';
     });
+
+    // Update appearance based on mood
+    function updateAppearance() {
+        const img = document.querySelector('img');
+        img.style.transition = 'filter 0.3s ease';
+        
+        // Reset filters
+        img.style.filter = '';
+        
+        // Apply mood-specific effects
+        switch(currentMood) {
+            case 'sleepy':
+                img.style.filter = 'brightness(0.8) contrast(0.9)';
+                break;
+            case 'excited':
+                img.style.filter = 'brightness(1.2) contrast(1.1) saturate(1.2)';
+                break;
+            case 'happy':
+                img.style.filter = 'brightness(1.1) saturate(1.1)';
+                break;
+        }
+    }
 });
 
 document.addEventListener('contextmenu', (e) => {

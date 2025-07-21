@@ -32,5 +32,26 @@
         "Chad",
         "Vibes",
         "Swag!"
+    ],
+    "happy": [
+        "This is such a great day!",
+        "I'm feeling pretty good!",
+        "Everything is awesome!",
+        "Let's code something fun!",
+        "Time to build something cool!",
+        "I love being your desktop buddy!"
+    ],
+    "sleepy": [
+        "Need... coffee...",
+        "My face is, facially tired...",
+        "Cheese",
+        "I need to rub caffeine over my face for my eyebags",
+        "Can you program a bed for me?"
+    ],
+    "excited": [
+        "I feel so sigma!",
+        "Cant contain myself for your code",
+        "This gonna be so swag",
+        "lol cant wait"
     ]
 }

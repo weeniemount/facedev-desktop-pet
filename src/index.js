@@ -5,6 +5,7 @@ const say = require('say');
 let mainWindow;
 let movementEnabled = true;
 let speechEnabled = true;
+let currentMood = 'happy'; // New mood state
 
 function createPromptWindow(question) {
   const win = new BrowserWindow({
@@ -110,6 +111,14 @@ ipcMain.handle('toggle-speech', () => {
   return speechEnabled;
 });
 
+ipcMain.handle('get-mood', () => currentMood);
+
+ipcMain.handle('set-mood', (event, mood) => {
+  currentMood = mood;
+  mainWindow?.webContents.send('mood-update', mood);
+  return currentMood;
+});
+
 ipcMain.on('context-menu', (event, params) => {
   const menu = Menu.buildFromTemplate([
     {
@@ -138,6 +147,24 @@ ipcMain.on('context-menu', (event, params) => {
         speechEnabled = !speechEnabled;
         mainWindow.webContents.send('state-update', { movement: movementEnabled, speech: speechEnabled });
       },
+    },
+    { type: 'separator' },
+    {
+      label: 'Mood',
+      submenu: [
+        {
+          label: 'Happy',
+          click: () => mainWindow.webContents.send('set-mood-request', 'happy'),
+        },
+        {
+          label: 'Sleepy',
+          click: () => mainWindow.webContents.send('set-mood-request', 'sleepy'),
+        },
+        {
+          label: 'Excited',
+          click: () => mainWindow.webContents.send('set-mood-request', 'excited'),
+        },
+      ],
     },
     { type: 'separator' },
     {
