@@ -90,12 +90,7 @@ async function speakRandomMessages() {
         const msg = shouldSayMoodMessage ? getRandomMessage('mood') : getRandomMessage('regular');
         queueMessage(msg);
         
-        // Adjust wait time based on mood
-        let waitTime = getRandomInt(2, 10);
-        if (currentMood === 'excited') waitTime = Math.max(1, waitTime - 2);
-        if (currentMood === 'sleepy') waitTime = waitTime + 3;
-        
-        await new Promise(resolve => setTimeout(resolve, waitTime * 1000));
+        await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
     }
 }
 

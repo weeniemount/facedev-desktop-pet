@@ -82,5 +82,51 @@
         "I dont know",
         "I dont know, probably",
         "I dont know, probably not"
+    ],
+        "drag_start": [
+        "Ahh!",
+        "Wooh!!",
+        "Here we go!",
+        "Wheeee!",
+        "Hold on tight!",
+        "This is fun!",
+        "Off we go!",
+        "Yay, adventure time!"
+    ],
+    "drag_end": [
+        "That was fun!",
+        "Nice trip!",
+        "Thanks for the ride!",
+        "Phew!",
+        "What a journey!",
+        "That was exciting!",
+        "Good landing!",
+        "Where to next?"
+    ],
+    "click": [
+        "Hey!",
+        "What's up?",
+        "Hi there!",
+        "You clicked me!",
+        "Hello!",
+        "Yes?",
+        "Poke!",
+        "Ouch!"
+    ],
+    "double_click": [
+        "Ooh, double click!",
+        "Changing mood!",
+        "Let's switch it up!",
+        "Time for a mood change!",
+        "Double tap magic!",
+        "Mood swap time!"
+    ],
+    "triple_click": [
+        "Triple click! Time for a joke!",
+        "Haha, here comes a joke!",
+        "You want a joke? Here goes!",
+        "Triple tap activated!",
+        "Joke mode engaged!",
+        "Ready for some humor?"
     ]
 }
