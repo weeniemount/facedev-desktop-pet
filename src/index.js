@@ -96,6 +96,12 @@ ipcMain.handle('submit-prompt', async (event, text) => {
   win.close();
 });
 
+ipcMain.handle('ask-question', async (event, question) => {
+  mainWindow.webContents.send('answer-question', question);
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.close();
+});
+
 ipcMain.handle('get-movement-state', () => movementEnabled);
 ipcMain.handle('get-speech-state', () => speechEnabled);
 
@@ -131,6 +137,12 @@ ipcMain.on('context-menu', (event, params) => {
       label: 'Tell a joke',
       click: () => {
         mainWindow.webContents.send('custom-speech', 'tell-joke');
+      },
+    },
+    {
+      label: 'Ask me a question!',
+      click: () => {
+        createPromptWindow("What will you ask me?")
       },
     },
     { type: 'separator' },

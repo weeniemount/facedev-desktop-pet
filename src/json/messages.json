@@ -71,5 +71,16 @@
         "yayyyy", 
         "yippie",
         "cant express my feelings of this much excitedness"
+    ],
+    "responses": [
+        "Yeah",
+        "Yeah, probably",
+        "No",
+        "No, probably not",
+        "Im not so sure",
+        "Possibly",
+        "I dont know",
+        "I dont know, probably",
+        "I dont know, probably not"
     ]
 }

@@ -21,5 +21,7 @@ contextBridge.exposeInMainWorld('electron', {
   getMood: () => ipcRenderer.invoke('get-mood'),
   setMood: (mood) => ipcRenderer.invoke('set-mood', mood),
   onMoodUpdate: (callback) => ipcRenderer.on('mood-update', (event, mood) => callback(mood)),
-  onSetMoodRequest: (callback) => ipcRenderer.on('set-mood-request', (event, mood) => callback(mood))
+  onSetMoodRequest: (callback) => ipcRenderer.on('set-mood-request', (event, mood) => callback(mood)),
+  askQuestion: (question) => ipcRenderer.invoke('ask-question', question),
+  onAnswerQuestion: (callback) => ipcRenderer.on('answer-question', (event, question) => callback(question)),
 });

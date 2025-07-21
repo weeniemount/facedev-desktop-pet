@@ -5,6 +5,7 @@ async function loadMessages() {
     greetings: data.greetings,
     regular: [...data.questions, ...data.amused],
     jokes: data.jokes,
+    responses: data.responses || [],
     moods: {
       happy: data.happy || [],
       sleepy: data.sleepy || [],
@@ -17,6 +18,7 @@ let messages = {
   greetings: [],
   regular: [],
   jokes: [],
+  responses: [],
   moods: {
     happy: [],
     sleepy: [],
@@ -214,6 +216,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (speechEnabled) {
                 queueMessage(text);
             }
+        }
+    });
+
+    window.electron.onAnswerQuestion((question) => {
+        if (speechEnabled && messages.responses && messages.responses.length > 0) {
+            const response = getRandomMessage('responses');
+            queueMessage(response);
         }
     });
 
