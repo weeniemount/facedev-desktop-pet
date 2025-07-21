@@ -5,11 +5,15 @@ async function loadMessages() {
     greetings: data.greetings,
     regular: [...data.questions, ...data.amused],
     jokes: data.jokes,
-    responses: data.responses || [],
+    responses: data.responses,
+    actions: {
+      drag_start: data.drag_start,
+      drag_end: data.drag_end
+    },
     moods: {
-      happy: data.happy || [],
-      sleepy: data.sleepy || [],
-      excited: data.excited || []
+      happy: data.happy,
+      sleepy: data.sleepy,
+      excited: data.excited
     }
   };
 }
@@ -19,6 +23,10 @@ let messages = {
   regular: [],
   jokes: [],
   responses: [],
+  actions: {
+    drag_start: [],
+    drag_end: []
+  },
   moods: {
     happy: [],
     sleepy: [],
@@ -31,6 +39,7 @@ let movementEnabled = true;
 let speechEnabled = true;
 let currentMood = 'happy';
 let lastInteractionTime = Date.now();
+let isAutoMoving = false;
 
 // Add message queue system
 let messageQueue = [];
@@ -57,13 +66,21 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getRandomMessage(category) {
+function getRandomMessage(category, subcategory = null) {
     if (category === 'mood') {
         const moodMessages = messages.moods[currentMood];
         return moodMessages && moodMessages.length > 0 
             ? moodMessages[Math.floor(Math.random() * moodMessages.length)]
             : getRandomMessage('regular');
     }
+    
+    if (category === 'actions' && subcategory) {
+        const actionMessages = messages.actions[subcategory];
+        return actionMessages && actionMessages.length > 0 
+            ? actionMessages[Math.floor(Math.random() * actionMessages.length)]
+            : null;
+    }
+    
     const list = messages[category] || messages.regular;
     const index = Math.floor(Math.random() * list.length);
     return list[index];
@@ -111,6 +128,7 @@ async function speak(msg) {
 }
 
 async function moveToRandomPosition() {
+    isAutoMoving = true;
     const bounds = await window.electron.getScreenBounds();
     const [currentX, currentY] = await window.electron.getWindowPosition();
     
@@ -151,6 +169,7 @@ async function moveToRandomPosition() {
         window.electron.moveWindow(moveX, moveY);
         await new Promise(resolve => setTimeout(resolve, 25));
     }
+    isAutoMoving = false;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -214,6 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Listen for question answering
     window.electron.onAnswerQuestion((question) => {
         if (speechEnabled && messages.responses && messages.responses.length > 0) {
             const response = getRandomMessage('responses');
@@ -258,11 +278,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     img.addEventListener('mousedown', (e) => {
+        if (isAutoMoving) return;
+
         isDragging = true;
         currentX = e.screenX;
         currentY = e.screenY;
         img.style.cursor = 'grabbing';
         lastInteractionTime = Date.now();
+
+        if (speechEnabled) {
+            const dragStartMessage = getRandomMessage('actions', 'drag_start');
+            if (dragStartMessage) queueMessage(dragStartMessage);
+        }
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -278,8 +305,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener('mouseup', () => {
-        isDragging = false;
-        img.style.cursor = 'grab';
+        if (isDragging) {
+            isDragging = false;
+            img.style.cursor = 'grab';
+
+            if (!isAutoMoving && speechEnabled) {
+                const dragEndMessage = getRandomMessage('actions', 'drag_end');
+                if (dragEndMessage) queueMessage(dragEndMessage);
+            }
+        }
     });
 
     // Update appearance based on mood
