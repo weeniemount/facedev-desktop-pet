@@ -91,6 +91,7 @@ async function speakRandomMessages() {
         queueMessage(msg);
         
         await new Promise(resolve => setTimeout(resolve, getRandomInt(2, 10) * 1000));
+        await new Promise(resolve => setTimeout(resolve, getRandomInt(5, 10) * 1000));
     }
 }
 
