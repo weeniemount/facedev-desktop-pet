@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder build --win",
+    "build": "electron-builder build --win --ia32",
     "build:dir": "electron-builder build --win --dir"
   },
   "author": "weenie, UsernameThis",
@@ -14,12 +14,13 @@
     "say": "^0.16.0"
   },
   "devDependencies": {
-    "electron": "^15.0.0",
+    "electron": "^13.6.9",
     "electron-builder": "^26.0.12"
   },
   "build": {
     "appId": "com.weenieusernamethis.facedevdesktoppet",
     "productName": "FaceDev Desktop Pet",
+    "afterPack": "scripts/removeUnneededFiles.js",
     "directories": {
       "output": "dist"
     },
