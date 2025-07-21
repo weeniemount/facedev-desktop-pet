@@ -5,14 +5,23 @@
         "Whats up!",
         "Facedev here.",
         "EEEEEE",
-        "Hi chat."
+        "Hi chat.",
+        "Welcome homie",
+        "hai!",
+        "uh, hello?",
+        "Heellooo!!",
+        "hiiiiiii"
     ],
     "questions": [
         "What is this?",
         "hmm, i wonder whats this?",
         "What does this do?",
         "Woah what?",
-        "Cheese"
+        "Cheese",
+        "Wat",
+        "Where are your Homework files..? 😈",
+        "Hmmm, what does this do?",
+        "This seems like absolute yum yum, can i eat it?"
     ],
     "jokes": [
         "What does a .get().get() do in java? it 'gets' the 'get'.. uhh-",
@@ -31,9 +40,17 @@
         "Sigma!",
         "Chad",
         "Vibes",
-        "Swag!"
+        "Swag!",
+        "Nah what?!",
+        "ooh",
+        "this is some good thing not gonna lie.",
+        "freaky, i like it."
     ],
     "happy": [
+        "I'm feeling pretty good!",
+        "Everything is awesome!",
+        "Time to build something cool!",
+        "I love being your desktop buddy!",
         "This day will be great!"
     ],
     "sleepy": [
@@ -41,12 +58,19 @@
         "My face is, facially tired...",
         "Cheese",
         "I need to rub caffeine over my face for my eyebags",
-        "Can you program a bed for me?"
+        "Can you program a bed for me? i am kind of tired here.",
+        "Zzzz... Oops. almost feel asleep.", 
+        "I need some monster right now..",
+        "can you just exit me so i can rest in peace?"
     ],
     "excited": [
         "I feel so sigma!",
         "Cant contain myself for your code",
         "This gonna be so swag",
-        "lol cant wait"
+        "lol cant wait",
+        "I just shat myself",
+        "yayyyy", 
+        "yippie",
+        "cant express my feelings of this much excitedness",
     ]
 }
